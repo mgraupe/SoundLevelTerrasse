@@ -3,6 +3,7 @@ import usb.core
 import datetime
 import time
 import numpy as np
+import pandas as pd
 
 # Inspired by ebswift, https://www.ebswift.com/reverse-engineering-spl-usb.html
 
@@ -14,7 +15,7 @@ import numpy as np
 # 82 array of 4 bytes returned
 
 class wensn:
-    def __init__(self):
+    def __init__(self,verbose=True):
         self.ranges = ["30-80", "40-90", "50-100", "60-110", "70-120", "80-130", "30-130"]
         self.speeds = ["fast", "slow"]
         self.weights = ["A", "C"]
@@ -23,7 +24,8 @@ class wensn:
 
         self.dev = usb.core.find(idVendor=0x16c0, idProduct=0x5dc)
         assert self.dev is not None
-        print(self.dev)
+        if verbose:
+            print(self.dev)
         #return self.dev
 
         self.peak = 0
@@ -63,7 +65,6 @@ class wensn:
 
         self.dev.ctrl_transfer(0xC0, 3, wvalue, 0, 200)
 
-
     def readSPL(self):
         #global peak
 
@@ -94,12 +95,30 @@ class wensn:
             #log.fp.flush()
             time.sleep(2)
 
+    def measureSPLForSpecificTime(self,timeInSeconds):
+        SPLs = []
+        startTime = time.time()
+        while True:
+            dB, range, weight, speed = self.readSPL()
+            print(dB)
+            SPLs.append(dB)
+            currentTime = time.time()
+            if (currentTime-startTime)> timeInSeconds:
+                break
+            time.sleep(2)
+
+        SPLs = np.asarray(SPLs)
+        s = pd.Series(SPLs)
+        desc = s.describe()
+        return desc
+
 def main():
 
     wsn = wensn()
     #wsn.setMode()
     wsn.readSPLMultipleTimes(10)
 
+    wsn.measureSPLForSpecificTime(60)
 
 if __name__=="__main__":
     main()
