@@ -2,7 +2,7 @@ import usb.core
 #import logroll
 import datetime
 import time
-
+import numpy as np
 
 # Inspired by ebswift, https://www.ebswift.com/reverse-engineering-spl-usb.html
 
@@ -83,7 +83,7 @@ class wensn:
 
     def readSPLMultipleTimes(self,nMeasurements):
 
-        for i in range(nMeasurements):
+        for i in np.arange(nMeasurements):
             now = datetime.datetime.now()
             # roll over to a new log whenever the filename changes - in this case, every hour.
             #log.open_or_reopen(now.strftime('%Y-%m-%d-%H-%M.log'))
