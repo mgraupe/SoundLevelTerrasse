@@ -92,12 +92,12 @@ class wensn:
             #print("%.2f,%s,%s,%s" % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')))
 
             #log.fp.flush()
-            time.sleep(1)
+            time.sleep(2)
 
 def main():
 
     wsn = wensn()
-    wsn.setMode()
+    #wsn.setMode()
     wsn.readSPLMultipleTimes(10)
 
 
