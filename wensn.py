@@ -100,7 +100,7 @@ class wensn:
         startTime = time.time()
         while True:
             dB, range, weight, speed = self.readSPL()
-            print(dB)
+            print("%.2f" % dB)
             SPLs.append(dB)
             currentTime = time.time()
             if (currentTime-startTime)> timeInSeconds:
