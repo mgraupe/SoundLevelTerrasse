@@ -118,7 +118,9 @@ def main():
     #wsn.setMode()
     wsn.readSPLMultipleTimes(10)
 
-    wsn.measureSPLForSpecificTime(60)
+    ret = wsn.measureSPLForSpecificTime(60)
+    print(ret)
+    print('end')
 
 if __name__=="__main__":
     main()
